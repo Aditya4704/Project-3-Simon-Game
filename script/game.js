@@ -1,0 +1,85 @@
+var userClickedPattern = [];
+var gamePattern = [];
+var buttonColours = ["red", "blue", "green", "yellow"];
+var level = 0;
+function nextSequence()
+{  
+    var randomNumber = Math.floor(Math.random() * 4);
+    var randomChosenColour = buttonColours[randomNumber];
+    gamePattern.push(randomChosenColour);
+    $("#level-title").text("Level "+level);
+    level++;
+    playSound(randomChosenColour);
+    animatePress(randomChosenColour);
+}
+function playSound(name)
+{
+    if(name==='red')
+    {
+        var audio1 = new Audio("sounds/red.mp3");
+        audio1.play();
+    }
+    else if(name==='blue')
+    {
+        var audio2 = new Audio("sounds/blue.mp3");
+        audio2.play();
+    }
+    else if(name==='green')
+    {
+        var audio3 = new Audio("sounds/green.mp3");
+        audio3.play();
+    }
+    else if(name==='yellow')
+    {
+        var audio4 = new Audio("sounds/yellow.mp3");
+        audio4.play();
+    }
+}
+function animatePress(name)
+{
+    $("#" + name).addClass("pressed");
+    setTimeout(function (){
+    $("#" + name).removeClass("pressed");
+    } , 100);
+}
+
+function checkAnswer(currentLevel)
+{
+    if(gamePattern[currentLevel] === userClickedPattern[currentLevel])
+    {
+        console.log("success");
+        if(currentLevel === (gamePattern.length - 1))
+        {
+            userClickedPattern = [];
+            setTimeout(nextSequence , 1000);
+        }
+    }
+    else
+    {
+        
+        $("body").addClass("game-over");
+        var audio = new Audio("/sounds/wrong.mp3");
+        audio.play();
+        setTimeout(function (){
+        $("body").removeClass("game-over");
+        } , 200);
+        $("#level-title").text("Game Over, Press Any Key to Restart");
+        userClickedPattern = [];
+        gamePattern = [];
+        level = 0;
+    }
+}
+
+$(document).keydown(()=>
+    {
+        if(gamePattern.length == 0)  nextSequence();
+    });
+
+$(".btn").click(function ()
+{ 
+    var userChosenColour = $(this).attr('id');
+    userClickedPattern.push(userChosenColour);  
+    playSound(userChosenColour);
+    animatePress(userChosenColour);
+    checkAnswer(userClickedPattern.length - 1);
+});
