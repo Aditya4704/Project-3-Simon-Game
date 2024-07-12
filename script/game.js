@@ -6,10 +6,11 @@ let audio1 = new Audio("public/sounds/red.mp3");
 let audio2 = new Audio("public/sounds/blue.mp3");
 let audio3 = new Audio("public/sounds/green.mp3");
 let audio4 = new Audio("public/sounds/yellow.mp3");
+let audio = new Audio("public/sounds/wrong.mp3");
 function nextSequence()
 {  
-    var randomNumber = Math.floor(Math.random() * 4);
-    var randomChosenColour = buttonColours[randomNumber];
+    let randomNumber = Math.floor(Math.random() * 4);
+    let randomChosenColour = buttonColours[randomNumber];
     gamePattern.push(randomChosenColour);
     $("#level-title").text("Level "+level);
     level++;
@@ -45,7 +46,6 @@ function checkAnswer(currentLevel)
     else
     {   
         $("body").addClass("game-over");
-        var audio = new Audio("public/sounds/wrong.mp3");
         audio.play();
         setTimeout(function (){
         $("body").removeClass("game-over");
@@ -65,7 +65,7 @@ $(document).keydown(()=>
 
 $(".btn").click(function ()
 { 
-    var userChosenColour = $(this).attr('id');
+    let userChosenColour = $(this).attr('id');
     userClickedPattern.push(userChosenColour);  
     playSound(userChosenColour);
     animatePress(userChosenColour);
